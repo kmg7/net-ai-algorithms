@@ -13,5 +13,19 @@
             MaxValue = max;
             Sets = members;
         }
+        // Get the index of set and its membership value
+        public Dictionary<int, double> GetSetResults(double value)
+        {
+            Dictionary<int, double> sets = [];
+            for (int i = 0; i < Sets.Count; i++)
+            {
+                double memValue = Sets[i].CalculateMembership(value);
+                if (memValue > 0)
+                {
+                    sets.Add(i, memValue);
+                }
+            }
+            return sets;
+        }
     }
 }
