@@ -1,0 +1,28 @@
+sensitivity,quantity,dirtiness,spin speed,duration,detergent
+sensitive,small,small,sensitive,short,too few
+sensitive,small,medium,average sensitive,short,few
+sensitive,small,large,medium,average short,medium
+sensitive,medium,small,sensitive,short,medium
+sensitive,medium,medium,average sensitive,average short,medium
+sensitive,medium,large,medium,medium,much
+sensitive,large,small,average sensitive,average short,medium
+sensitive,large,medium,average sensitive,medium,much
+sensitive,large,large,medium,average long,much
+medium,small,small,average sensitive,average short,few
+medium,small,medium,medium,short,medium
+medium,small,large,average strong,medium,much
+medium,medium,small,average sensitive,average short,medium
+medium,medium,medium,medium,medium,medium
+medium,medium,large,sensitive,long,much
+medium,large,small,sensitive,medium,medium
+medium,large,medium,sensitive,average long,much
+medium,large,large,sensitive,long,too much
+strong,small,small,medium,medium,few
+strong,small,medium,average strong,medium,medium
+strong,small,large,strong,average long,much
+strong,medium,small,medium,medium,medium
+strong,medium,medium,average strong,average long,medium
+strong,medium,large,strong,medium,too much
+strong,large,small,average strong,average long,much
+strong,large,medium,average strong,long,much
+strong,large,large,strong,long,too much 
