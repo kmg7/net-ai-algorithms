@@ -2,10 +2,10 @@
 {
     internal class FuzzyRule
     {
-        public FuzzySet[] Antecedents { get; set; }
-        public FuzzySet[] Consequents { get; set; }
+        public int[] Antecedents { get; set; }
+        public int[] Consequents { get; set; }
 
-        public FuzzyRule(FuzzySet[] antecedents, FuzzySet[] consequents)
+        public FuzzyRule(int[] antecedents, int[] consequents)
         {
             Antecedents = antecedents;
             Consequents = consequents;
