@@ -44,5 +44,18 @@ namespace FormUI
             _ = MessageBox.Show("Rule database read successfully");
             Rules = rules;
         }
+        public void FillTheRulesTable(int[] indexes)
+        {
+            dataGridView1.Rows.Clear();
+            foreach (int index in indexes)
+            {
+                FuzzyRule rule = Rules[index];
+                string[] row = new string[] { $"{index}",sens_input[rule.Antecedents[0]],
+                    quant_input[rule.Antecedents[1]],
+                    dirt_input[rule.Antecedents[2]], spin_output[rule.Consequents[0]],
+                    time_output[rule.Consequents[1]], detergent_output[rule.Consequents[2]] };
+                dataGridView1.Rows.Add(row);
+            }
+        }
     }
 }
