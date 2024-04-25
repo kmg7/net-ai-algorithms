@@ -1,6 +1,6 @@
 ﻿namespace Lib
 {
-    internal enum FunctionType
+    public enum FunctionType
     {
         Triangle,
         Trapezoid,

@@ -1,6 +1,6 @@
 ﻿namespace Lib
 {
-    internal class RuleTable
+    public class RuleTable
     {
         public List<FuzzyRule> Rules { get; set; }
 

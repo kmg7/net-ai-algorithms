@@ -1,6 +1,6 @@
 ﻿namespace Lib
 {
-    internal class FuzzyVariable
+    public class FuzzyVariable
     {
         public string Name { get; set; }
         public double MinValue { get; set; }
