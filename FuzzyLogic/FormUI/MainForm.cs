@@ -25,27 +25,35 @@ namespace FormUI
         }
         private void button_run_Click(object sender, EventArgs e)
         {
-            if (MamdaniInferenceEngine == null)
+            try
             {
-                MessageBox.Show("Error: Inference engine is not ready");
-                return;
+                if (MamdaniInferenceEngine == null)
+                {
+                    MessageBox.Show("Error: Inference engine is not ready");
+                    return;
+                }
+                double input_sens = ((double)numericUpDown_sens.Value);
+                double input_quant = ((double)numericUpDown_quant.Value);
+                double input_dirt = ((double)numericUpDown_dirt.Value);
+                if (input_sens == 0 || input_dirt == 0 || input_quant == 0)
+                {
+                    return;
+                }
+                chart_sensitivity.DrawLine(input_sens);
+                chart_quantity.DrawLine(input_quant);
+                chart_dirtiness.DrawLine(input_dirt);
+                ExecutionReport executionReport = MamdaniInferenceEngine.Execute([input_sens, input_quant, input_dirt]);
+                FillTheRulesTable(executionReport.TriggeredRuleIndexes);
+                FillAntecedentResultLabels(executionReport.AntecedentResults);
+                FillMamdaniOutputLabels(executionReport.MamdaniValues);
+                FillOutputResultLabels(executionReport.OutputResults);
+                FillOutputDetailResultLabels(executionReport.MamdaniResults);
+
             }
-            double input_sens = ((double)numericUpDown_sens.Value);
-            double input_quant = ((double)numericUpDown_quant.Value);
-            double input_dirt = ((double)numericUpDown_dirt.Value);
-            if (input_sens == 0 || input_dirt == 0 || input_quant == 0)
+            catch (Exception)
             {
-                return;
+                MessageBox.Show("Unexpected Error Happended");
             }
-            chart_sensitivity.DrawLine(input_sens);
-            chart_quantity.DrawLine(input_quant);
-            chart_dirtiness.DrawLine(input_dirt);
-            ExecutionReport executionReport = MamdaniInferenceEngine.Execute([input_sens, input_quant, input_dirt]);
-            FillTheRulesTable(executionReport.TriggeredRuleIndexes);
-            FillAntecedentResultLabels(executionReport.AntecedentResults);
-            FillMamdaniOutputLabels(executionReport.MamdaniValues);
-            FillOutputResultLabels(executionReport.OutputResults);
-            FillOutputDetailResultLabels(executionReport.MamdaniResults);
         }
         private void FillAntecedentResultLabels(List<Dictionary<int, double>> antes)
         {
