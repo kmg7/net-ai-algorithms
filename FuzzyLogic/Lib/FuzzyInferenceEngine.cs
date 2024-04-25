@@ -13,9 +13,11 @@
             Consequents = consequents;
         }
 
-        public List<double> Execute(double[] values)
+        public ExecutionReport Execute(double[] values)
         {
             // Get the antecedent set results
+            ExecutionReport report = new ExecutionReport();
+
             List<Dictionary<int, double>> antecedentSetResults = [];
             List<List<int>> antecedentSetIndexes = [];
             for (int i = 0; i < Antecedents.Count; i++)
@@ -23,9 +25,11 @@
                 antecedentSetResults.Add(Antecedents[i].GetSetResults(values[i]));
                 antecedentSetIndexes.Add([.. antecedentSetResults[i].Keys]);
             }
+            report.AntecedentResults = antecedentSetResults;
 
             // Find the rule indexes that match the antecedent set results
             List<int> ruleIndexes = RuleTable.FindRuleIndexes(antecedentSetIndexes);
+            report.TriggeredRuleIndexes = [.. ruleIndexes];
 
             // Calculate the firing strength of each rule
             List<FuzzyRuleTriggered> triggeredRules = [];
@@ -52,8 +56,10 @@
                 }
             }
             Dictionary<int, Dictionary<int, double>> mamdaniResults = [];
+            List<double> mamdaniValues = [];
             foreach (FuzzyRuleTriggered rule in triggeredRules)
             {
+                mamdaniValues.Add(rule.FiringStrength);
                 for (int i = 0; i < rule.ConsequentIndexes.Length; i++)
                 {
                     if (!mamdaniResults.ContainsKey(i))
@@ -72,6 +78,8 @@
                     }
                 }
             }
+            report.MamdaniValues = mamdaniValues;
+
             List<FuzzyVariable> outputVariables = [];
             foreach (var item in mamdaniResults)
             {
@@ -86,6 +94,7 @@
                 }
                 outputVariables.Add(new FuzzyVariable(conseq.Name, conseq.MinValue, conseq.MaxValue, newSets));
             }
+            report.MamdaniResults = mamdaniResults;
             List<double> defuzifiedValues = [];
             for (int i = 0; i < outputVariables.Count; i++)
             {
@@ -94,7 +103,9 @@
                 double defuzifiedValue = Defuzifier.Defuzify(variable, memValues, DefuzificationMethod.Centroid);
                 defuzifiedValues.Add(defuzifiedValue);
             }
-            return defuzifiedValues;
+            report.OutputResults = defuzifiedValues;
+
+            return report;
         }
     }
 }
