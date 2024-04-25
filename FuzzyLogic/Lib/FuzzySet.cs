@@ -1,17 +1,22 @@
 ﻿namespace Lib
 {
-    internal class FuzzySet
+    public class FuzzySet
     {
         public string Name { get; set; }
         public FunctionType FunctionType { get; set; }
         public double[] Parameters { get; set; }
+        public double? _cut { get; set; }
         public FuzzySet(string name, double[] parameters, FunctionType functionType)
         {
             Name = name;
             Parameters = parameters;
             FunctionType = functionType;
         }
-
+        public void SetCut(double cut)
+        {
+            _cut = cut;
+        }
+        // if cut is not null then return value will be multiplied by it
         public double CalculateMembership(double value)
         {
             switch (FunctionType)
@@ -21,8 +26,19 @@
                 case FunctionType.Trapezoid:
                     return Trapezoidal(value);
                 default:
-                    return -1;
+                    throw new Exception("Unknown function type");
+                    //return -1;
             }
+        }
+        public double CalculateCutMembership(double value)
+        {
+            double result = CalculateMembership(value);
+            if (_cut.HasValue && value > _cut)
+            {
+                return (double)_cut;
+            }
+            return result;
+
         }
         private double Triangle(double value)
         {
