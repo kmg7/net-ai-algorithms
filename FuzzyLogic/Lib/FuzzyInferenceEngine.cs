@@ -1,70 +1,100 @@
 ﻿namespace Lib
 {
     // Inference System will be the underlying MAMDANI engine for our system
-    internal class FuzzyInferenceEngine
+    public class FuzzyInferenceEngine
     {
-        public FuzzyRule[] Rules { get; set; }
-        public FuzzyInferenceEngine(FuzzyRule[] rules)
+        public RuleTable RuleTable { get; }
+        public List<FuzzyVariable> Antecedents { get; }
+        public List<FuzzyVariable> Consequents { get; }
+        public FuzzyInferenceEngine(List<FuzzyRule> rules, List<FuzzyVariable> antecedents, List<FuzzyVariable> consequents)
         {
-            Rules = rules;
+            RuleTable = new RuleTable(rules);
+            Antecedents = antecedents;
+            Consequents = consequents;
         }
 
-        public void Execute(double[] values, FuzzyVariable[] inputVars, FuzzyVariable[] outputVars)
+        public List<double> Execute(double[] values)
         {
-            //// Iterate over rules and get the fired rules
-            //foreach (FuzzyRule rule in Rules)
-            //{
-            //    // Get the antecedent sets
-            //    FuzzySet[] antecedentSets = rule.Antecedents;
+            // Get the antecedent set results
+            List<Dictionary<int, double>> antecedentSetResults = [];
+            List<List<int>> antecedentSetIndexes = [];
+            for (int i = 0; i < Antecedents.Count; i++)
+            {
+                antecedentSetResults.Add(Antecedents[i].GetSetResults(values[i]));
+                antecedentSetIndexes.Add([.. antecedentSetResults[i].Keys]);
+            }
 
-            //    // For each antecedent set, calculate the membership value
-            //    double[] membershipValues = new double[antecedentSets.Length];
-            //    for (int i = 0; i < antecedentSets.Length; i++)
-            //    {
-            //        membershipValues[i] = antecedentSets[i].CalculateMembership(values[i]);
-            //    }
+            // Find the rule indexes that match the antecedent set results
+            List<int> ruleIndexes = RuleTable.FindRuleIndexes(antecedentSetIndexes);
 
-            //    // Aggregate the membership values
-            //    //double aggregatedMembershipValue = AggregateMembershipValues(membershipValues);
+            // Calculate the firing strength of each rule
+            List<FuzzyRuleTriggered> triggeredRules = [];
+            foreach (int ruleIndex in ruleIndexes)
+            {
+                FuzzyRule rule = RuleTable.Rules[ruleIndex];
+                double firingStrength = 1;
+                for (int i = 0; i < rule.Antecedents.Length; i++)
+                {
+                    int setIndex = rule.Antecedents[i];
+                    firingStrength = Math.Min(firingStrength, antecedentSetResults[i][setIndex]);
+                }
+                triggeredRules.Add(new FuzzyRuleTriggered(firingStrength, rule.Consequents));
+            }
 
-            //    // If the rule is fired, get the consequent sets
-            //    if (aggregatedMembershipValue > 0)
-            //    {
-            //        FuzzySet[] consequentSets = rule.Consequents;
-
-            //        // For each consequent set, calculate the membership value
-            //        double[] consequentMembershipValues = new double[consequentSets.Length];
-            //        for (int i = 0; i < consequentSets.Length; i++)
-            //        {
-            //            //consequentMembershipValues[i] = consequentSets[i].CalculateMembership(aggregatedMembershipValue);
-            //        }
-
-            //        // Aggregate the membership values
-            //        //double aggregatedConsequentMembershipValue = AggregateMembershipValues(consequentMembershipValues);
-
-            //        // Store the aggregated consequent membership value for further processing
-
-            //    }
+            // Calculate the membership values of the consequent sets
+            List<List<double>> consequentSetResults = [];
+            for (int i = 0; i < Consequents.Count; i++)
+            {
+                consequentSetResults.Add([]);
+                for (int j = 0; j < Consequents[i].Sets.Count; j++)
+                {
+                    consequentSetResults[i].Add(0);
+                }
+            }
+            Dictionary<int, Dictionary<int, double>> mamdaniResults = [];
+            foreach (FuzzyRuleTriggered rule in triggeredRules)
+            {
+                for (int i = 0; i < rule.ConsequentIndexes.Length; i++)
+                {
+                    if (!mamdaniResults.ContainsKey(i))
+                    {
+                        mamdaniResults[i] = [];
+                    }
+                    int ruleConseqIndex = rule.ConsequentIndexes[i];//spin :2, time:3, detergent:1 // this is the index of the membership functions triggered fuzzy set
+                    if (!mamdaniResults[i].ContainsKey(ruleConseqIndex))
+                    {
+                        mamdaniResults[i][ruleConseqIndex] = -1;
+                    }
+                    double existingValue = mamdaniResults[i][ruleConseqIndex]; // if we had a pointer mech. this block would look better
+                    if (existingValue < rule.FiringStrength)
+                    {
+                        mamdaniResults[i][ruleConseqIndex] = rule.FiringStrength;
+                    }
+                }
+            }
+            List<FuzzyVariable> outputVariables = [];
+            foreach (var item in mamdaniResults)
+            {
+                Console.WriteLine($"Consequent: {item.Key}");
+                var conseq = Consequents[item.Key];
+                List<FuzzySet> newSets = [];
+                foreach (var subItem in item.Value)
+                {
+                    conseq.Sets[subItem.Key].SetCut(subItem.Value);
+                    newSets.Add(conseq.Sets[subItem.Key]);
+                    Console.WriteLine($"Set: {subItem.Key}, Membership: {subItem.Value}");
+                }
+                outputVariables.Add(new FuzzyVariable(conseq.Name, conseq.MinValue, conseq.MaxValue, newSets));
+            }
+            List<double> defuzifiedValues = [];
+            for (int i = 0; i < outputVariables.Count; i++)
+            {
+                FuzzyVariable variable = outputVariables[i];
+                List<double> memValues = consequentSetResults[i];
+                double defuzifiedValue = Defuzifier.Defuzify(variable, memValues, DefuzificationMethod.Centroid);
+                defuzifiedValues.Add(defuzifiedValue);
+            }
+            return defuzifiedValues;
         }
-
-        // For each fired rule, get the consequent sets
-
-        // For each consequent set, calculate the membership value
-        // ...
-
-        // Aggregate the membership values
-        // ...
-
-        // Defuzzify the output
-        // ...
-
-        // Assign the defuzzified value to the output variable
-        // ...
     }
-
-    //private double AggregateMembershipValues(double[] values)
-    //{
-    //    // Implement the logic to aggregate the membership values
-    //    // ...
-    //}
 }
