@@ -16,6 +16,11 @@
             };
         }
 
+        public static double Derivative(ActivationFunc func, double x)
+        {
+            return Calculate(func, x) * (1 - Calculate(func, x));
+        }
+
         public static double Sigmoid(double x)
         {
             return 1 / (1 + Math.Exp(-x));
