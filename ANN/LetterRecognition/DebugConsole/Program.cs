@@ -30,7 +30,6 @@ for (int i = 0; i < history.Count; i++)
     Console.WriteLine($"Input[{i}] Result %{history[i][0] * 100}");
 }
 
-
 Console.WriteLine("----------------------------------------------------------------------------------");
 
 TrainingData[] tdata = [
@@ -63,8 +62,7 @@ for (int i = 0; i < tdata.Length; i++)
 
 Console.WriteLine("----------------------------------------------------------------------------------");
 
-Console.WriteLine("\nPoor model not trained yet\n");
-
+Console.WriteLine("\nCollision Data Poor model not trained yet\n");
 Console.WriteLine("----------------------------------------------------------------------------------");
 Console.WriteLine("Index\tPredicted\tActual");
 for (int i = 0; i < tdata.Length; i++)
@@ -74,10 +72,13 @@ for (int i = 0; i < tdata.Length; i++)
     Console.WriteLine($"{i}\t{predicted[0]:F4}\t\t{tdata[i].Outputs[0]}");
 }
 Console.WriteLine("----------------------------------------------------------------------------------");
-
-ModelTrainer.TrainModel(tdata, poorModel, CostFunc.Subtract, 1, 2);
+double momentum = 0.5;
+double learningRate = 4.0;
+int epoch = 100;
+ModelTrainer.TrainModel(tdata, poorModel, CostFunc.MeanSquaredError, epoch, momentum, learningRate);
 
 Console.WriteLine("\nPoor model trained \n");
+Console.WriteLine($"Momentum: {momentum}\tLearningRate: {learningRate}\tEpoch: {epoch}");
 Console.WriteLine("----------------------------------------------------------------------------------");
 Console.WriteLine("Index\tPredicted\tActual");
 for (int i = 0; i < tdata.Length; i++)
@@ -88,3 +89,50 @@ for (int i = 0; i < tdata.Length; i++)
 }
 Console.WriteLine("----------------------------------------------------------------------------------");
 
+TrainingData[] xorData = [
+   new([0, 0], [0]),
+   new([0, 1], [1]),
+   new([1, 0], [1]),
+   new([1, 1], [0]),
+    ];
+
+Node x1 = new([0.13, -0.92], 0.34);
+Node x2 = new([0.57, -0.33], -0.12);
+Node xo1 = new([0.16, 0.75], -0.99);
+NodeLayer xHid = new([x1, x2], ActivationFunc.Sigmoid);
+NodeLayer xOut = new([xo1], ActivationFunc.Sigmoid);
+NetworkModel xorModel = new([xHid], xOut);
+Console.WriteLine("XOR DATASET");
+Console.WriteLine("Index\tInput1\tInput2\nOutput\t");
+for (int i = 0; i < xorData.Length; i++)
+{
+    Console.WriteLine($"{i}\t{xorData[i].Inputs[0]}\t{xorData[i].Inputs[1]}\t{xorData[i].Outputs[0]}");
+}
+
+Console.WriteLine("----------------------------------------------------------------------------------");
+Console.WriteLine("XOR model not trained yet");
+
+Console.WriteLine("Index\tPredicted\tActual");
+for (int i = 0; i < xorData.Length; i++)
+{
+    double[] inputs = xorData[i].Inputs;
+    double[] predicted = xorModel.Run(inputs);
+    Console.WriteLine($"{i}\t{predicted[0]:F4}\t\t{xorData[i].Outputs[0]}");
+}
+Console.WriteLine("----------------------------------------------------------------------------------");
+momentum = 0.8;
+learningRate = 0.5;
+epoch = 500;
+ModelTrainer.TrainModel(xorData, xorModel, CostFunc.Subtract, epoch, momentum, learningRate);
+
+Console.WriteLine("\nXOR model trained \n");
+Console.WriteLine($"Momentum: {momentum}\tLearningRate: {learningRate}\tEpoch: {epoch}");
+Console.WriteLine("----------------------------------------------------------------------------------");
+Console.WriteLine("Index\tPredicted\tActual");
+for (int i = 0; i < xorData.Length; i++)
+{
+    double[] inputs = xorData[i].Inputs;
+    double[] predicted = xorModel.Run(inputs);
+    Console.WriteLine($"{i}\t{predicted[0]:F4}\t\t{xorData[i].Outputs[0]}");
+}
+Console.WriteLine("-------------------------------------------------------------------------------");

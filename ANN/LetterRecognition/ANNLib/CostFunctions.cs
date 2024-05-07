@@ -30,7 +30,12 @@
 
         public static double MeanSquareError(double[] predicted, double[] actual)
         {
-            return predicted.Zip(actual, (p, a) => Math.Pow(p - a, 2)).Sum();
+            double sum = 0;
+            for (int i = 0; i < predicted.Length; i++)
+            {
+                sum += Math.Pow(predicted[i] - actual[i], 2);
+            }
+            return sum;
         }
     }
 }
