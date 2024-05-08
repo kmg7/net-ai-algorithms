@@ -14,5 +14,11 @@
             }
             return results;
         }
+
+        public static NodeLayer Random(Random random, ActivationFunc actiFunc, int inputCount, int nodeCount, bool nodesHasBias = false)
+        {
+            var nodes = Enumerable.Range(0, nodeCount).Select(x => (Node.Random(random, inputCount, nodesHasBias)));
+            return new NodeLayer([.. nodes], actiFunc);
+        }
     }
 }

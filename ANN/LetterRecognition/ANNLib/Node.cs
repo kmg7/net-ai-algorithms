@@ -32,6 +32,18 @@
             LastWeightChangeAmount = new double[weights.Length];
         }
 
+        public static Node Random(Random random, int inputCount, bool hasBias = false)
+        {
+            double bias = 0;
+            if (hasBias)
+            {
+                bias = (random.NextDouble() * 2) - 1;
+            }
+
+            double[] weights = Enumerable.Range(0, inputCount).Select(x => (random.NextDouble() * 2) - 1).ToArray();
+            return new(weights, bias);
+        }
+
         public double SumWeightedInputs(double[] inputs)
         {
             double sum = 0;

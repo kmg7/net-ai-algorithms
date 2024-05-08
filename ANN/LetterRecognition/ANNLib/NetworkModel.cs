@@ -17,5 +17,27 @@
             }
             return OutputLayer.CalculateLayer(history.Last());
         }
+
+        public static NetworkModel Random(
+            int inputCount,
+            List<(int nodeCount, ActivationFunc actifunc, bool nodesHasBias)> hiddenLayerOptions,
+            (int nodeCount, ActivationFunc actiFunc, bool nodesHasBias) outputLayerOption
+            )
+        {
+            List<NodeLayer> hiddenLayers = [];
+            Random random = new();
+            for (int i = 0; i < hiddenLayerOptions.Count; i++)
+            {
+                var (nodeCount, actifunc, nodesHasBias) = hiddenLayerOptions[i];
+                int nodeInputCount = i == 0 ? inputCount : hiddenLayerOptions[i - 1].nodeCount;
+                hiddenLayers.Add(NodeLayer.Random(random, actifunc, nodeInputCount, nodeCount, nodesHasBias));
+            }
+
+            var (outputNodeCount, outputActiFunc, outputNodesHasBias) = outputLayerOption;
+            int outputNodeInputCount = hiddenLayerOptions.Last().nodeCount;
+            NodeLayer outputLayer = NodeLayer.Random(random, outputActiFunc, outputNodeInputCount, outputNodeCount, outputNodesHasBias);
+
+            return new(hiddenLayers, outputLayer);
+        }
     }
 }
