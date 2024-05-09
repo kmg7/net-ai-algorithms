@@ -146,7 +146,9 @@
             // 
             // TrainingEpoch
             // 
+            TrainingEpoch.Increment = new decimal(new int[] { 5, 0, 0, 0 });
             TrainingEpoch.Location = new Point(78, 66);
+            TrainingEpoch.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             TrainingEpoch.Name = "TrainingEpoch";
             TrainingEpoch.Size = new Size(48, 23);
             TrainingEpoch.TabIndex = 7;
@@ -154,7 +156,9 @@
             // TrainingMomentum
             // 
             TrainingMomentum.DecimalPlaces = 3;
+            TrainingMomentum.Increment = new decimal(new int[] { 5, 0, 0, 131072 });
             TrainingMomentum.Location = new Point(78, 42);
+            TrainingMomentum.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
             TrainingMomentum.Name = "TrainingMomentum";
             TrainingMomentum.Size = new Size(48, 23);
             TrainingMomentum.TabIndex = 6;
@@ -162,7 +166,9 @@
             // TrainingLearnRate
             // 
             TrainingLearnRate.DecimalPlaces = 3;
+            TrainingLearnRate.Increment = new decimal(new int[] { 5, 0, 0, 131072 });
             TrainingLearnRate.Location = new Point(78, 18);
+            TrainingLearnRate.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
             TrainingLearnRate.Name = "TrainingLearnRate";
             TrainingLearnRate.Size = new Size(48, 23);
             TrainingLearnRate.TabIndex = 5;
@@ -456,8 +462,6 @@
         private Button ButtonModelCreate;
         private NumericUpDown numericUpDown6;
         private Label label9;
-        private NodeLayer hiddenLayerControl1;
-        private NodeLayer hiddenLayerControl2;
         private NodeLayer Hidden1;
         private NodeLayer Hidden2;
         private NodeLayer Output;
