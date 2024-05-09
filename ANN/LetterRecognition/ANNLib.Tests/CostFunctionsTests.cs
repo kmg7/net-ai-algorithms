@@ -4,18 +4,6 @@
     public class CostFunctionsTests
     {
         [TestMethod]
-        public void MeanSquareError_ReturnsCorrectValue()
-        {
-            double[] predicted = { 0.5, 0.3 };
-            double[] actual = { 0.3, 0.5 };
-            double expected = 0.04;
-
-            double result = CostFunctions.MeanSquareError(predicted, actual);
-
-            Assert.AreEqual(expected, result, 0.000001);
-        }
-
-        [TestMethod]
         public void Subtract_ReturnsCorrectValue()
         {
             double[] predicted = { 0.5 };
@@ -28,14 +16,25 @@
         }
 
         [TestMethod]
-        public void Calculate_ReturnsCorrectValue()
+        public void MeanSquareError_ReturnsCorrectValue()
         {
             double[] predicted = { 0.5, 0.3 };
             double[] actual = { 0.3, 0.5 };
-            CostFunc func = CostFunc.MeanSquaredError;
             double expected = 0.04;
 
-            double result = CostFunctions.Calculate(func, predicted, actual);
+            double result = CostFunctions.MeanSquareError(predicted, actual);
+
+            Assert.AreEqual(expected, result, 0.000001);
+        }
+
+        [TestMethod]
+        public void MeanAbsoluteError_ReturnsCorrectValue()
+        {
+            double[] predicted = { 0.5, 0.3 };
+            double[] actual = { 0.3, 0.5 };
+            double expected = 0.2;
+
+            double result = CostFunctions.MeanAbsoulteError(predicted, actual);
 
             Assert.AreEqual(expected, result, 0.000001);
         }

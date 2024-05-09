@@ -4,7 +4,8 @@
     public enum CostFunc
     {
         Subtract,
-        MeanSquaredError
+        MeanSquaredError,
+        MeanAbsoluteError,
     }
 
     public static class CostFunctions
@@ -18,6 +19,7 @@
             {
                 CostFunc.Subtract => Subtract(predicted, actual),
                 CostFunc.MeanSquaredError => MeanSquareError(predicted, actual),
+                CostFunc.MeanAbsoluteError => MeanAbsoulteError(predicted, actual),
                 _ => throw new NotImplementedException("CostFunc not implemented yet"),
             };
         }
@@ -35,7 +37,17 @@
             {
                 sum += Math.Pow(predicted[i] - actual[i], 2);
             }
-            return sum;
+            return sum / predicted.Length; // Divide by the length of the array to calculate the mean
+        }
+
+        public static double MeanAbsoulteError(double[] predicted, double[] actual)
+        {
+            double sum = 0;
+            for (int i = 0; i < predicted.Length; i++)
+            {
+                sum += Math.Abs(predicted[i] - actual[i]);
+            }
+            return sum / predicted.Length;
         }
     }
 }
