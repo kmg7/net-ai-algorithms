@@ -39,5 +39,22 @@
 
             return new(hiddenLayers, outputLayer);
         }
+        public static NetworkModel Random(NetworkModelConfig config)
+        {
+            List<NodeLayer> hiddenLayers = [];
+            Random random = new();
+            for (int i = 0; i < config.Hidden.Count; i++)
+            {
+                NodeLayerConfig nlc = config.Hidden[i];
+                int nodeInputCount = i == 0 ? config.InputCount : config.Hidden[i - 1].NodeCount;
+                hiddenLayers.Add(NodeLayer.Random(random, nlc.ActivationFunction, nodeInputCount, nlc.NodeCount, nlc.NodesHasBias));
+            }
+
+            NodeLayerConfig oc = config.Output;
+            int outputNodeInputCount = config.Hidden.Last().NodeCount;
+            NodeLayer outputLayer = NodeLayer.Random(random, oc.ActivationFunction, outputNodeInputCount, oc.NodeCount, oc.NodesHasBias);
+
+            return new(hiddenLayers, outputLayer);
+        }
     }
 }
