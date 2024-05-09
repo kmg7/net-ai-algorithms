@@ -53,4 +53,31 @@ ModelTrainer.TrainModel(LabXORData.DataSet, xorRandomModel, CostFunc.Subtract, e
 
 LabXORData.PrintModelPerformance(xorRandomModel);
 
+string filePath = Path.Combine(Environment.CurrentDirectory, "data_set_letters.csv");
+LabLetterRecogData.ReadTrainingDataFromCSV(filePath);
+LabLetterRecogData.PrintTrainingData();
+
+int inputCount = 35;
+
+int hiddenNodeCount = 100;
+bool hiddenNodesHasBias = true;
+ActivationFunc hiddenActiFunc = ActivationFunc.Sigmoid;
+
+int outputCount = 5;
+ActivationFunc outputActiFunc = ActivationFunc.Sigmoid;
+bool outputNodesHasBias = true;
+
+NetworkModel letterModel = NetworkModel.Random(inputCount,
+    [(hiddenNodeCount, hiddenActiFunc, hiddenNodesHasBias)],
+    (outputCount, outputActiFunc, outputNodesHasBias)
+    );
+
+LabLetterRecogData.PrintModelPerformance(letterModel);
+
+Console.WriteLine("Letter Recog Model Trained");
+Console.WriteLine($"Momentum: {momentum}\tLearningRate: {learningRate}\tEpoch: {epoch}");
+ModelTrainer.TrainModel([.. LabLetterRecogData.DataSet], letterModel, CostFunc.MeanSquaredError, epoch, momentum, learningRate);
+
+LabLetterRecogData.PrintModelPerformance(letterModel);
+
 
