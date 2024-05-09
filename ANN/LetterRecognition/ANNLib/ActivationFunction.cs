@@ -2,7 +2,10 @@
 {
     public enum ActivationFunc
     {
-        Sigmoid
+        Sigmoid,
+        StepUnit,
+        HyperbolicTangent,
+        ReLU
     }
 
     public static class ActivationFunctions
@@ -12,6 +15,9 @@
             return func switch
             {
                 ActivationFunc.Sigmoid => Sigmoid(x),
+                ActivationFunc.StepUnit => StepUnit(x),
+                ActivationFunc.HyperbolicTangent => HyperbolicTangent(x),
+                ActivationFunc.ReLU => ReLU(x),
                 _ => throw new NotImplementedException("ActivationFunc not implemented yet"),
             };
         }
@@ -24,6 +30,21 @@
         public static double Sigmoid(double x)
         {
             return 1 / (1 + Math.Exp(-x));
+        }
+
+        public static double StepUnit(double x)
+        {
+            return x >= 0 ? 1 : 0;
+        }
+
+        public static double HyperbolicTangent(double x)
+        {
+            return Math.Tanh(x);
+        }
+
+        public static double ReLU(double x)
+        {
+            return x >= 0 ? x : 0;
         }
     }
 }
