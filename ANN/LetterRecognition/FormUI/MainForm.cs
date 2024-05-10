@@ -1,5 +1,6 @@
 using ANNLib;
 using System.Text;
+using System.Text.Json;
 
 namespace FormUI
 {
@@ -51,10 +52,10 @@ namespace FormUI
             if (Model == null)
             {
                 LabelModelStatus.Text = "Not Ready";
-                //ButtonModelExport.Enabled = false;
+                ButtonModelExport.Enabled = false;
                 return;
             }
-            //ButtonModelExport.Enabled = true;
+            ButtonModelExport.Enabled = true;
             LabelModelStatus.Text = "Ready";
         }
 
@@ -247,6 +248,55 @@ namespace FormUI
         private void ButtonConsoleClear_Click(object sender, EventArgs e)
         {
             ConsoleClear();
+        }
+
+        private void ButtonModelExport_Click(object sender, EventArgs e)
+        {
+            string json = JsonSerializer.Serialize(Model);
+            // save json to file open a new file dialog
+            SaveFileDialog fileDialog = new()
+            {
+                Filter = "JSON Files|*.json"
+            };
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                File.WriteAllText(fileDialog.FileName, json);
+                ConsoleWriteLine("Model exported to file");
+            }
+        }
+
+        private void ButtonModelImport_Click(object sender, EventArgs e)
+        {
+            //open a file dialog and parse json model to model if all goes ok change the model and model status
+
+            if (Model != null)
+            {
+                DialogResult answer = MessageBox.Show("Model already exists, do you want to overwrite it?", "Warning", MessageBoxButtons.YesNo);
+                if (answer != DialogResult.Yes)
+                {
+                    return;
+                }
+            }
+            OpenFileDialog fileDialog = new()
+            {
+                Filter = "JSON Files|*.json"
+            };
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    string json = File.ReadAllText(fileDialog.FileName);
+                    Model = JsonSerializer.Deserialize<NetworkModel>(json);
+                    UpdateModelStatus();
+                    ConsoleWriteLine("Model imported from file");
+                    PrintModelPerformance();
+                }
+                catch (Exception ex)
+                {
+                    //_ = MessageBox.Show(ex.Message);
+                    throw ex;
+                }
+            }
         }
     }
 }

@@ -1,12 +1,25 @@
-﻿namespace ANNLib
+﻿using System.Text.Json.Serialization;
+
+namespace ANNLib
 {
     public class Node
     {
-        public double[] Weights { get; set; }
+        [JsonPropertyName("b")]
         public double Bias { get; set; }
+
+        [JsonPropertyName("w")]
+        public double[] Weights { get; set; }
+
+        [JsonIgnore]
         public double ActivationResult { get; set; }
+
+        [JsonIgnore]
         public double[] LastWeightChangeAmount { get; set; }
+
+        [JsonIgnore]
         public double LastBiasChangeAmount { get; set; }
+
+        [JsonIgnore]
         public double LastChangeRate { get; set; }
 
         public Node(double[] weights)
@@ -16,6 +29,7 @@
             LastWeightChangeAmount = new double[weights.Length];
         }
 
+        [JsonConstructor]
         public Node(double[] weights, double bias)
         {
             Weights = weights;
@@ -29,7 +43,6 @@
             Bias = bias;
             LastBiasChangeAmount = lastBiasChange;
             LastWeightChangeAmount = lastWeightChange;
-            LastWeightChangeAmount = new double[weights.Length];
         }
 
         public static Node Random(Random random, int inputCount, bool hasBias = false)

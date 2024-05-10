@@ -1,9 +1,14 @@
-﻿namespace ANNLib
+﻿using System.Text.Json.Serialization;
+
+namespace ANNLib
 {
-    public class NetworkModel(List<NodeLayer> hidden, NodeLayer output)
+    public class NetworkModel(List<NodeLayer> hiddenLayers, NodeLayer outputLayer)
     {
-        public List<NodeLayer> HiddenLayers { get; set; } = hidden;
-        public NodeLayer OutputLayer { get; set; } = output;
+        [JsonPropertyName("hidden")]
+        public List<NodeLayer> HiddenLayers { get; set; } = hiddenLayers;
+
+        [JsonPropertyName("output")]
+        public NodeLayer OutputLayer { get; set; } = outputLayer;
 
         public double[] Run(double[] inputs)
         {

@@ -1,9 +1,17 @@
-﻿namespace ANNLib
+﻿using System.Text.Json.Serialization;
+
+namespace ANNLib
 {
     public class NodeLayer(List<Node> nodes, ActivationFunc actiFunc)
     {
+        [JsonPropertyName("nodes")]
         public List<Node> Nodes { get; set; } = nodes;
+
+        [JsonPropertyName("func"), JsonPropertyOrder(1)]
         public ActivationFunc ActiFunc { get; set; } = actiFunc;
+
+        [JsonPropertyName("nodeCount"), JsonPropertyOrder(0)]
+        public int NodeCount => Nodes.Count;
 
         public double[] CalculateLayer(double[] inputs)
         {

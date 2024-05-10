@@ -45,7 +45,7 @@
             LabelDataSetStatus = new Label();
             groupBox3 = new GroupBox();
             ButtonModelExport = new Button();
-            button5 = new Button();
+            ButtonModelImport = new Button();
             LabelModelStatus = new Label();
             groupBox4 = new GroupBox();
             Output = new NodeLayer();
@@ -264,7 +264,7 @@
             // 
             groupBox3.BackColor = SystemColors.Info;
             groupBox3.Controls.Add(ButtonModelExport);
-            groupBox3.Controls.Add(button5);
+            groupBox3.Controls.Add(ButtonModelImport);
             groupBox3.Controls.Add(LabelModelStatus);
             groupBox3.Location = new Point(660, 12);
             groupBox3.Name = "groupBox3";
@@ -282,16 +282,17 @@
             ButtonModelExport.TabIndex = 6;
             ButtonModelExport.Text = "Export";
             ButtonModelExport.UseVisualStyleBackColor = true;
+            ButtonModelExport.Click += ButtonModelExport_Click;
             // 
-            // button5
+            // ButtonModelImport
             // 
-            button5.Enabled = false;
-            button5.Location = new Point(10, 39);
-            button5.Name = "button5";
-            button5.Size = new Size(73, 23);
-            button5.TabIndex = 3;
-            button5.Text = "Import";
-            button5.UseVisualStyleBackColor = true;
+            ButtonModelImport.Location = new Point(10, 39);
+            ButtonModelImport.Name = "ButtonModelImport";
+            ButtonModelImport.Size = new Size(73, 23);
+            ButtonModelImport.TabIndex = 3;
+            ButtonModelImport.Text = "Import";
+            ButtonModelImport.UseVisualStyleBackColor = true;
+            ButtonModelImport.Click += ButtonModelImport_Click;
             // 
             // LabelModelStatus
             // 
@@ -455,7 +456,7 @@
         private Button ButtonDatasetImport;
         private Button ButtonDatasetParse;
         private GroupBox groupBox3;
-        private Button button5;
+        private Button ButtonModelImport;
         private Label LabelModelStatus;
         private Button ButtonModelExport;
         private GroupBox groupBox4;
