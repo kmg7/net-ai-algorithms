@@ -40,6 +40,7 @@
             label2 = new Label();
             label1 = new Label();
             groupBox2 = new GroupBox();
+            ButtonDataSetShow = new Button();
             ButtonDatasetParse = new Button();
             ButtonDatasetImport = new Button();
             LabelDataSetStatus = new Label();
@@ -58,6 +59,7 @@
             ResultConsole = new RichTextBox();
             ButtonClassify = new Button();
             ButtonConsoleClear = new Button();
+            NumUDShowIndex = new NumericUpDown();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)TrainingEpoch).BeginInit();
             ((System.ComponentModel.ISupportInitialize)TrainingMomentum).BeginInit();
@@ -67,6 +69,7 @@
             groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown6).BeginInit();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)NumUDShowIndex).BeginInit();
             SuspendLayout();
             // 
             // letterMatrix1
@@ -220,6 +223,8 @@
             // groupBox2
             // 
             groupBox2.BackColor = SystemColors.Info;
+            groupBox2.Controls.Add(NumUDShowIndex);
+            groupBox2.Controls.Add(ButtonDataSetShow);
             groupBox2.Controls.Add(ButtonDatasetParse);
             groupBox2.Controls.Add(ButtonDatasetImport);
             groupBox2.Controls.Add(LabelDataSetStatus);
@@ -229,6 +234,17 @@
             groupBox2.TabIndex = 4;
             groupBox2.TabStop = false;
             groupBox2.Text = "Dataset";
+            // 
+            // ButtonDataSetShow
+            // 
+            ButtonDataSetShow.Enabled = false;
+            ButtonDataSetShow.Location = new Point(46, 96);
+            ButtonDataSetShow.Name = "ButtonDataSetShow";
+            ButtonDataSetShow.Size = new Size(37, 23);
+            ButtonDataSetShow.TabIndex = 5;
+            ButtonDataSetShow.Text = "Get";
+            ButtonDataSetShow.UseVisualStyleBackColor = true;
+            ButtonDataSetShow.Click += ButtonDataSetShow_Click;
             // 
             // ButtonDatasetParse
             // 
@@ -406,6 +422,16 @@
             ButtonConsoleClear.UseVisualStyleBackColor = true;
             ButtonConsoleClear.Click += ButtonConsoleClear_Click;
             // 
+            // NumUDShowIndex
+            // 
+            NumUDShowIndex.Enabled = false;
+            NumUDShowIndex.Location = new Point(10, 96);
+            NumUDShowIndex.Maximum = new decimal(new int[] { 0, 0, 0, 0 });
+            NumUDShowIndex.Name = "NumUDShowIndex";
+            NumUDShowIndex.Size = new Size(36, 23);
+            NumUDShowIndex.TabIndex = 6;
+            NumUDShowIndex.TextAlign = HorizontalAlignment.Right;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -435,6 +461,7 @@
             groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown6).EndInit();
             panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)NumUDShowIndex).EndInit();
             ResumeLayout(false);
         }
 
@@ -470,5 +497,7 @@
         private Button ButtonClassify;
         private Button ButtonConsoleClear;
         private RichTextBox ResultConsole;
+        private Button ButtonDataSetShow;
+        private NumericUpDown NumUDShowIndex;
     }
 }

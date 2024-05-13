@@ -42,6 +42,8 @@ namespace FormUI
             {
                 LabelDataSetStatus.Text = "Not Imported";
                 ButtonDatasetParse.Enabled = false;
+                ButtonDataSetShow.Enabled = false;
+                NumUDShowIndex.Enabled = false;
                 return;
             }
             ButtonDatasetParse.Enabled = true;
@@ -70,6 +72,11 @@ namespace FormUI
             {
                 TrainingData = [.. RecognitionEngine.ReadDataSetFromFile(SelectedFilePath)];
                 ButtonDatasetParse.Enabled = false;
+                ButtonDataSetShow.Enabled = true;
+                NumUDShowIndex.Enabled = true;
+                NumUDShowIndex.Maximum = TrainingData.Length - 1;
+
+
                 LabelDataSetStatus.Text = "Ready";
                 PrintTrainingData();
             }
@@ -297,6 +304,18 @@ namespace FormUI
                     throw ex;
                 }
             }
+        }
+
+        private void ButtonDataSetShow_Click(object sender, EventArgs e)
+        {
+            if (TrainingData == null)
+            {
+                return;
+            }
+            int index = (int)NumUDShowIndex.Value;
+            // convert double[] to int[]
+            int[] pixels = TrainingData[index].Inputs.Select(x => (int)x).ToArray();
+            letterMatrix1.SetPixels(pixels);
         }
     }
 }

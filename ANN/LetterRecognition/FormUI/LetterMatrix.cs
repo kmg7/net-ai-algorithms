@@ -18,6 +18,16 @@
             }
             return pixels;
         }
+        public void SetPixels(int[] pixels)
+        {
+            // convert array contains 0,1 to []bool
+            for (int i = 0; i < 35; i++)
+            {
+                Pixels[i] = pixels[i] == 1;
+                panel.Controls[i].BackColor = Pixels[i] ? Color.Black : Color.White;
+            }
+            panel.Refresh();
+        }
 
         private void InitializeMatrix()
         {
